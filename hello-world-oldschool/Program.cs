@@ -101,24 +101,30 @@ class Program
         Console.WriteLine("===================================");
         bool keepScanning = true;
         int totalFlashes = 0;
+        int flashedThisRound = 0;
+        int flashedPreviousRound = 0;
+        Console.WriteLine();
+        Console.WriteLine("Step number: 0");
+        // octopus = increaseEnergy(octopus);
+        var flashed = detectFlashed(octopus);
         //var flashed;
         for (int step = 0; step <= value; step++)
         {
-            int flashedThisRound = 0;
-            int flashedPreviousRound = 0;
             Console.WriteLine();
-            Console.WriteLine("Step number: " + step);
+            Console.WriteLine("Step number: " + step + " total flashes: " + totalFlashes);
             octopus = increaseEnergy(octopus);
-            var flashed = detectFlashed(octopus);
+            flashed = detectFlashed(octopus);
             if (flashed.Count() == 0)
             {
                 System.Console.WriteLine("No flashes this step");
                 continue;
             }
             flashedThisRound = flashed.Count();
+
             while (keepScanning)
             {
                 flashedPreviousRound = flashedThisRound;
+                totalFlashes += flashedPreviousRound;
                 octopus = resetFlashed(octopus, flashed);
                 flashedThisRound = 0;
                 foreach (var coord in flashed)
@@ -131,12 +137,14 @@ class Program
                 }
                 flashed = detectFlashed(octopus);
                 flashedThisRound += flashed.Count();
-                System.Console.WriteLine("Round:");
+                System.Console.WriteLine("Round: flashedThisRound: {0} flashedPreviousRound: {1} totalFlashes: {2}", flashedThisRound, flashedPreviousRound, totalFlashes);
                 printBoard(octopus);
                 Console.ReadLine();
                 if (flashedThisRound == flashedPreviousRound)
+                {
                     System.Console.WriteLine("No more flashes!");
-                keepScanning = false;
+                    keepScanning = false;
+                }
 
             }
             octopus = resetFlashed(octopus, flashed);
@@ -239,6 +247,10 @@ class Program
             adjacentList.Add(new Tuple<int, int>(row, col - 1));
         if (row > 0 && col > 0)
             adjacentList.Add(new Tuple<int, int>(row - 1, col - 1));
+        if (row > 0 && col < cols - 1)
+            adjacentList.Add(new Tuple<int, int>(row - 1, col + 1));
+        if (row < rows - 1 && col > 0)
+            adjacentList.Add(new Tuple<int, int>(row + 1, col - 1));
         if (row < rows - 1)
             adjacentList.Add(new Tuple<int, int>(row + 1, col));
         if (col < cols - 1)
