@@ -104,31 +104,34 @@ class Program
         int flashedThisRound = 0;
         int flashedPreviousRound = 0;
         Console.WriteLine();
-        Console.WriteLine("Step number: 0");
+        //Console.WriteLine("Step number: 0");
         // octopus = increaseEnergy(octopus);
         var flashed = detectFlashed(octopus);
         var stepFlashed = detectFlashed(octopus);
         //var flashed;
-        for (int step = 0; step <= value; step++)
+        for (int step = 0; step < value; step++)
         {
-            Console.WriteLine();
-            Console.WriteLine("Step number: " + step + " total flashes: " + totalFlashes);
+            keepScanning = true;
+            stepFlashed.Clear();
+            //Console.WriteLine();
+            //Console.WriteLine("Step number: " + (step + 1) + " total flashes: " + totalFlashes);
             octopus = increaseEnergy(octopus);
             flashed = detectFlashed(octopus);
             stepFlashed = stepFlashed.Concat(flashed).ToList();
             octopus = resetFlashed(octopus, flashed);
             if (flashed.Count() == 0)
             {
-                System.Console.WriteLine("No flashes this step");
+                //System.Console.WriteLine("No flashes this step");
                 continue;
             }
-            flashedThisRound = flashed.Count();
+            //flashedThisRound = flashed.Count();
 
             while (keepScanning)
             {
-                flashedPreviousRound = flashedThisRound;
-                totalFlashes += flashedPreviousRound;
-                octopus = resetFlashed(octopus, flashed);
+
+                //flashedPreviousRound = flashedThisRound;
+                //totalFlashes += flashedPreviousRound;
+                //octopus = resetFlashed(octopus, flashed);
                 flashedThisRound = 0;
                 foreach (var coord in flashed)
                 {
@@ -140,25 +143,30 @@ class Program
                 }
                 flashed = detectFlashed(octopus);
                 stepFlashed = stepFlashed.Concat(flashed).ToList();
-                octopus = resetFlashed(octopus, stepFlashed);
-                flashedThisRound += flashed.Count();
-                System.Console.WriteLine("Round: flashedThisRound: {0} flashedPreviousRound: {1} totalFlashes: {2}", flashedThisRound, flashedPreviousRound, totalFlashes);
-                printBoard(octopus, stepFlashed);
-                Console.ReadLine();
+                octopus = resetFlashed(octopus, flashed);
+                flashedPreviousRound = flashedThisRound;
+                flashedThisRound = flashed.Count();
+                //totalFlashes += flashedThisRound;
+                //System.Console.WriteLine("Round: flashedThisRound: {0} flashedPreviousRound: {1} totalFlashes: {2}", flashedThisRound, flashedPreviousRound, totalFlashes);
+                //printBoard(octopus, stepFlashed);
+                //Console.ReadLine();
                 if (flashedThisRound == flashedPreviousRound)
                 {
-                    System.Console.WriteLine("No more flashes!");
+                    //System.Console.WriteLine("No more flashes!");
                     keepScanning = false;
                 }
 
             }
             octopus = resetFlashed(octopus, stepFlashed);
-            printBoard(octopus);
-            totalFlashes += flashedThisRound;
+            //printBoard(octopus, stepFlashed);
+            //totalFlashes += flashedThisRound;
+            totalFlashes += stepFlashed.Count();
             //System.Console.WriteLine("Flashed this round: " + flashedThisRound);
-            System.Console.WriteLine("Total flashes: " + totalFlashes);
-            Console.ReadLine();
+            //System.Console.WriteLine("Total flashes: " + totalFlashes);
+            //Console.ReadLine();
         }
+        printBoard(octopus, stepFlashed);
+        System.Console.WriteLine("Total flashes: " + totalFlashes);
         /*
         foreach (var tuple in flashed)
         {
