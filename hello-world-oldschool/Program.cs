@@ -114,6 +114,7 @@ class Program
             Console.WriteLine("Step number: " + step + " total flashes: " + totalFlashes);
             octopus = increaseEnergy(octopus);
             flashed = detectFlashed(octopus);
+            octopus = resetFlashed(octopus, flashed);
             if (flashed.Count() == 0)
             {
                 System.Console.WriteLine("No flashes this step");
@@ -136,9 +137,10 @@ class Program
                     }
                 }
                 flashed = detectFlashed(octopus);
+                octopus = resetFlashed(octopus, flashed);
                 flashedThisRound += flashed.Count();
                 System.Console.WriteLine("Round: flashedThisRound: {0} flashedPreviousRound: {1} totalFlashes: {2}", flashedThisRound, flashedPreviousRound, totalFlashes);
-                printBoard(octopus);
+                printBoard(octopus, flashed);
                 Console.ReadLine();
                 if (flashedThisRound == flashedPreviousRound)
                 {
@@ -150,7 +152,7 @@ class Program
             octopus = resetFlashed(octopus, flashed);
             printBoard(octopus);
             totalFlashes += flashedThisRound;
-            System.Console.WriteLine("Flashed this round: " + flashedThisRound);
+            //System.Console.WriteLine("Flashed this round: " + flashedThisRound);
             System.Console.WriteLine("Total flashes: " + totalFlashes);
             Console.ReadLine();
         }
@@ -271,6 +273,35 @@ class Program
             for (int col = 0; col < cols; col++)
             {
                 Console.Write(arr[row, col] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine();
+    }
+    static void printBoard(int[,] arr, List<Tuple<int, int>> flashedThisStep)
+    {
+        int rows = arr.GetLength(0);
+        int cols = arr.GetLength(1);
+        //Console.WriteLine("rows: " + rows);
+        //Console.WriteLine("cols: " + cols);
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int col = 0; col < cols; col++)
+            {
+                Tuple<int, int> current = new Tuple<int, int>(row, col);
+                if (flashedThisStep.Contains(current))
+                {
+                    //Console.WriteLine("Holy crap, this one flashed!");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write(arr[row, col] + " ");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write(arr[row, col] + " ");
+                }
+
             }
             Console.WriteLine();
         }
