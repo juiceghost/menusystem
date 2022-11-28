@@ -108,7 +108,68 @@ class Program
         // octopus = increaseEnergy(octopus);
         var flashed = detectFlashed(octopus);
         var stepFlashed = detectFlashed(octopus);
+        /*
         //var flashed;
+        bool keepScanningOuter = true;
+        int count = 0;
+        while (keepScanningOuter)
+        {
+            keepScanning = true;
+            stepFlashed.Clear();
+            octopus = increaseEnergy(octopus);
+            flashed = detectFlashed(octopus);
+            stepFlashed = stepFlashed.Concat(flashed).ToList();
+            octopus = resetFlashed(octopus, flashed);
+            if (flashed.Count() == 0)
+            {
+                //System.Console.WriteLine("No flashes this step");
+                continue;
+            }
+
+
+            while (keepScanning)
+            {
+
+                //flashedPreviousRound = flashedThisRound;
+                //totalFlashes += flashedPreviousRound;
+                //octopus = resetFlashed(octopus, flashed);
+                flashedThisRound = 0;
+                foreach (var coord in flashed)
+                {
+                    var adjacent = findAdjacent(octopus, coord);
+                    foreach (var adjacentCoord in adjacent)
+                    {
+                        octopus[adjacentCoord.Item1, adjacentCoord.Item2] += 1;
+                    }
+                }
+                flashed = detectFlashed(octopus);
+                stepFlashed = stepFlashed.Concat(flashed).ToList();
+                octopus = resetFlashed(octopus, flashed);
+                flashedPreviousRound = flashedThisRound;
+                flashedThisRound = flashed.Count();
+                //totalFlashes += flashedThisRound;
+                //System.Console.WriteLine("Round: flashedThisRound: {0} flashedPreviousRound: {1} totalFlashes: {2}", flashedThisRound, flashedPreviousRound, totalFlashes);
+                //printBoard(octopus, stepFlashed);
+                //Console.ReadLine();
+                if (flashedThisRound == flashedPreviousRound)
+                {
+                    //System.Console.WriteLine("No more flashes!");
+                    keepScanning = false;
+                }
+
+            }
+            octopus = resetFlashed(octopus, stepFlashed);
+            count++;
+            if (stepFlashed.Count() == 100)
+            {
+                System.Console.WriteLine("All octopus flashed! On step {0}", count);
+                keepScanningOuter = false;
+            }
+        }
+        */
+        // Part 1 below
+        Console.ReadLine();
+
         for (int step = 0; step < value; step++)
         {
             keepScanning = true;
@@ -158,12 +219,19 @@ class Program
 
             }
             octopus = resetFlashed(octopus, stepFlashed);
-            //printBoard(octopus, stepFlashed);
+            printBoard(octopus, stepFlashed);
             //totalFlashes += flashedThisRound;
             totalFlashes += stepFlashed.Count();
             //System.Console.WriteLine("Flashed this round: " + flashedThisRound);
-            //System.Console.WriteLine("Total flashes: " + totalFlashes);
-            //Console.ReadLine();
+
+
+            if (stepFlashed.Count() == 100) // Part 2
+            {
+                System.Console.WriteLine("Step: {0} Total flashes: {1}", (step + 1), totalFlashes);
+                System.Console.WriteLine("ALl flashed!");
+                Console.ReadLine();
+            }
+
         }
         printBoard(octopus, stepFlashed);
         System.Console.WriteLine("Total flashes: " + totalFlashes);
@@ -174,6 +242,7 @@ class Program
         }
         */
         Console.WriteLine();
+
     }
 
     static int[,] resetFlashed(int[,] arr, List<Tuple<int, int>> flashedThisStep)
